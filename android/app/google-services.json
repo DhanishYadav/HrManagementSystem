@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "910459591379",
+    "project_id": "fbauth-d691d",
+    "storage_bucket": "fbauth-d691d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910459591379:android:6ca7992cfd4a370e781226",
+        "android_client_info": {
+          "package_name": "com.kwicpay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910459591379-ot80r1kel3ot03c1koiebpgsb06il198.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kwicpay",
+            "certificate_hash": "d179a82f09e89f76b6115022c93faa173acc15ea"
+          }
+        },
+        {
+          "client_id": "910459591379-uef6913oq9ikom6umgna234i6qhc95th.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9BEHtn0fiTNUSAqCcqDN5ml5RyTIqemc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910459591379-uef6913oq9ikom6umgna234i6qhc95th.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
