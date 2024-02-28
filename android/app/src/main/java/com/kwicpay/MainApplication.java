@@ -1,5 +1,5 @@
 package com.kwicpay;
-
+import com.asterinet.react.bgactions.BackgroundActionsPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import android.app.Application;
 import com.facebook.react.PackageList;
@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new DefaultReactNativeHost(this) {
@@ -27,6 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
       new VectorIconsPackage();
       new RNHTMLtoPDFPackage();
       new RNFileViewerPackage();
+      new BackgroundActionsPackage();
+      new RNFetchBlobPackage();
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());
@@ -65,4 +68,5 @@ public class MainApplication extends Application implements ReactApplication {
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
+
 }

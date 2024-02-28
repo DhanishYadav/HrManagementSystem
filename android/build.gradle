@@ -15,12 +15,8 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")  
         classpath 'com.google.gms:google-services:4.4.0'   
     }
-
-    // Add the namespace property here
-    allprojects {
-        repositories {
-            maven { url 'https://jitpack.io' }
-            maven {url  "https://phonepe.mycloudrepo.io/public/repositories/phonepe-intentsdk-android"}
-        }
-    }
+    // repositories {
+    //         maven { url "https://maven.transistorsoft.com" }
+    // mavenCentral()
+    // }
 }

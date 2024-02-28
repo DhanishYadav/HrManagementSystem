@@ -1,51 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Dimensions } from 'react-native';
+import {
+     LineChart,
+} from "react-native-chart-kit";
 
 const AttendanceReport = () => {
-     const [latitude, setLatitude] = useState(null);
-     const [longitude, setLongitude] = useState(null);
-     const [Outlatitude, setOutLatitude] = useState(null);
-     const [Outlongitude, setOutLongitude] = useState(null);
-     useEffect(() => {
-          const fetchLocation = async () => {
-               try {
-                    const storedLatitude = await AsyncStorage.getItem('latitude');
-                    const storedLongitude = await AsyncStorage.getItem('longitude');
-                    const OutstoredLatitude = await AsyncStorage.getItem('CheckOutlatitude');
-                    const OutstoredLongitude = await AsyncStorage.getItem('Checkoutlongitude');
-                    // Check if values are not null before setting state
-                    if (storedLatitude !== null && storedLongitude !== null) {
-                         setLatitude(parseFloat(storedLatitude));
-                         setLongitude(parseFloat(storedLongitude));
-                    }
-                    if (OutstoredLatitude !== null && OutstoredLongitude !== null) {
-                         setOutLatitude(parseFloat(OutstoredLatitude));
-                         setOutLongitude(parseFloat(OutstoredLatitude));
-                    }
-               } catch (error) {
-                    console.error('Error fetching location from AsyncStorage:', error);
-               }
-          };
-
-          fetchLocation();
-     }, []); // Run the effect only once when the component mounts
-
      return (
           <View>
-               <Text>Attendance Report</Text>
-               {latitude !== null && longitude !== null && (
-                    <Text>
-                         Latitude: {latitude}, Longitude: {longitude}
-                    </Text>
-               )}
-               <View>
-                    {Outlatitude !== null && Outlongitude !== null && (
-                         <Text>
-                              Latitude: {Outlatitude}, Longitude: {Outlongitude}
-                         </Text>
-                    )}
-               </View>
+               <Text style={{ textAlign: "center", marginVertical: 10, fontSize: 18, fontWeight: "bold" }}>Dhanish Yadav Attendance Report</Text>
+               <LineChart
+                    data={{
+                         labels: ["January", "February", "March", "April", "May", "June"],
+                         datasets: [
+                              {
+                                   data: [
+                                        Math.random() * 100,
+                                        Math.random() * 100,
+                                        Math.random() * 100,
+                                        Math.random() * 100,
+                                        Math.random() * 100,
+                                        Math.random() * 100
+                                   ]
+                              }
+                         ]
+                    }}
+                    width={Dimensions.get("window").width - 8}
+                    height={240}
+                    yAxisLabel="$"
+                    yAxisSuffix="k"
+                    yAxisInterval={1}
+                    chartConfig={{
+                         backgroundColor: "#e26a00",
+                         backgroundGradientFrom: "#fb8c00",
+                         backgroundGradientTo: "#ffa726",
+                         decimalPlaces: 2,
+                         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                         style: {
+                              borderRadius: 16
+                         },
+                         propsForDots: {
+                              r: "6",
+                              strokeWidth: "2",
+                              stroke: "#ffa726"
+                         }
+                    }}
+                    bezier
+                    style={{
+                         marginHorizontal: 4,
+                         borderRadius: 16
+                    }}
+               />
           </View>
      );
 };

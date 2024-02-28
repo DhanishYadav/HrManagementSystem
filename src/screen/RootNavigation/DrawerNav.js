@@ -8,32 +8,26 @@ import AttendanceReport from '../components/Attendance Report';
 import UserTracking from '../components/UserTracking';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import ReimbursementClaim from '../components/ReimbursementClaim';
-import WeekOff from '../components/WeekOff';
+import PaySlip from '../components/ReimbursementClaim';
+// import WeekOff from '../components/WeekOff';
+import ReimbursementClaim from '../components/WeekOff';
 import Holiday from '../components/Holiday';
+import DSRScreen from '../components/DSRScreen';
+import { useEffect, useState } from 'react';
 const Drawer = createDrawerNavigator();
+
 function DrawerNav() {
+     const [loginDepartment, setLoginDepartment] = useState(null);
+     useEffect(() => {
+          getEmailFromStorage();
+     }, []);
      const navigation = useNavigation();
-     const handleLogout = async () => {
-          Alert.alert(
-               'Logout',
-               'Are you sure you want to log out?',
-               [
-                    {
-                         text: 'Cancel',
-                         onPress: () => console.log('Cancel Pressed'),
-                         style: 'cancel',
-                    },
-                    {
-                         text: 'Logout',
-                         onPress: () => {
-                              AsyncStorage.removeItem('EmployeeCode');
-                              navigation.navigate("Login")
-                         },
-                    },
-               ],
-               { cancelable: false }
-          );
+     const getEmailFromStorage = async () => {
+          try {
+               setLoginDepartment(await AsyncStorage.getItem('environmentValue'));
+          } catch (error) {
+               Alert.alert("Invalid demand")
+          }
      };
      return (
           <Drawer.Navigator
@@ -46,164 +40,226 @@ function DrawerNav() {
                               iconName = 'dashboard';
                          } else if (route.name === 'Attendance') {
                               iconName = 'barschart';
-                         } else if (route.name === 'Attendance Report') {
+                         } else if (route.name === 'DSR Screen') {
                               iconName = 'filetext1';
                          } else if (route.name === 'User Tracking') {
                               iconName = 'user';
                          }
-                         else if (route.name === 'Reimbursement Claim') {
-                              iconName = 'retweet';
+                         else if (route.name === 'PaySlip') {
+                              iconName = 'alipay-circle';
                          }
-                         else if (route.name === 'Holiday') {
+                         else if (route.name === 'Leave') {
                               iconName = 'calendar';
                          }
-                         else if (route.name === 'Week Off') {
+                         else if (route.name === 'Reimbursement Claim') {
                               iconName = 'save';
                          }
                          return <AntDesign name={iconName} size={size} color="red" />;
                     },
                })}
           >
-               <Drawer.Screen name="Dashboard" component={DashBoard}
+               {loginDepartment === "2" ? (<><Drawer.Screen name="Dashboard" component={DashBoard}
                     options={{
                          headerStyle: {
                               backgroundColor: '#f2612b'
                          },
                          headerTitleStyle: {
                               color: 'white',
-                              marginLeft: 80,
+                              marginLeft: 'auto', // Align to the left
+                              marginRight: 'auto', // Align to the right
+                              justifyContent: 'center', // Center vertically
+                              alignItems: 'center', // Center horizontally
+                         }, headerTitleStyle: {
+                              color: 'white',
+                              marginLeft: 30,
                          },
                          headerTintColor: 'white',
                          headerTitle: "Kwic Pay",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
                     }}
                />
-               <Drawer.Screen name="Attendance" component={Attendance}
+                    {/* <Drawer.Screen name="Attendance" component={Attendance}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Attendance",
+                         }}
+                    /> */}
+                    <Drawer.Screen name="DSR Screen" component={DSRScreen}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Daily Sales Report",
+                         }}
+                    />
+                    <Drawer.Screen name="PaySlip" component={PaySlip}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "PaySlip",
+                         }}
+                    />
+                    <Drawer.Screen name="Reimbursement Claim" component={ReimbursementClaim}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Reimbursement Claim",
+                         }}
+                    />
+                    <Drawer.Screen name="Leave" component={Holiday}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Leave",
+
+                         }}
+                    />
+                    {/* <Drawer.Screen name="User Tracking" component={UserTracking}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "User Tracking",
+
+                         }}
+                    /> */}
+               </>) : (<><Drawer.Screen name="Dashboard" component={DashBoard}
                     options={{
                          headerStyle: {
                               backgroundColor: '#f2612b'
                          },
                          headerTitleStyle: {
                               color: 'white',
-                              marginLeft: 70,
-                         },
-                         headerTintColor: 'white',
-                         headerTitle: "Attendance",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
-                    }}
-               />
-               <Drawer.Screen name="Attendance Report" component={AttendanceReport}
-                    options={{
-                         headerStyle: {
-                              backgroundColor: '#f2612b'
-                         },
-                         headerTitleStyle: {
+                              marginLeft: 'auto', // Align to the left
+                              marginRight: 'auto', // Align to the right
+                              justifyContent: 'center', // Center vertically
+                              alignItems: 'center', // Center horizontally
+                         }, headerTitleStyle: {
                               color: 'white',
-                              marginLeft: 50,
+                              marginLeft: 30,
                          },
                          headerTintColor: 'white',
-                         headerTitle: "Attendance Report",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
+                         headerTitle: "Kwic Pay",
                     }}
                />
-               <Drawer.Screen name="Reimbursement Claim" component={ReimbursementClaim}
-                    options={{
-                         headerStyle: {
-                              backgroundColor: '#f2612b'
-                         },
-                         headerTitleStyle: {
-                              color: 'white',
-                              marginLeft: 70,
-                         },
-                         headerTintColor: 'white',
-                         headerTitle: "Reimbursement Claim",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
-                    }}
-               />
-               <Drawer.Screen name="Week Off" component={WeekOff}
-                    options={{
-                         headerStyle: {
-                              backgroundColor: '#f2612b'
-                         },
-                         headerTitleStyle: {
-                              color: 'white',
-                              marginLeft: 70,
-                         },
-                         headerTintColor: 'white',
-                         headerTitle: "Week Off",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
-                    }}
-               />
-               <Drawer.Screen name="Holiday" component={Holiday}
-                    options={{
-                         headerStyle: {
-                              backgroundColor: '#f2612b'
-                         },
-                         headerTitleStyle: {
-                              color: 'white',
-                              marginLeft: 70,
-                         },
-                         headerTintColor: 'white',
-                         headerTitle: "Holiday",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
-                    }}
-               />
-               <Drawer.Screen name="User Tracking" component={UserTracking}
-                    options={{
-                         headerStyle: {
-                              backgroundColor: '#f2612b'
-                         },
-                         headerTitleStyle: {
-                              color: 'white',
-                              marginLeft: 70,
-                         },
-                         headerTintColor: 'white',
-                         headerTitle: "User Tracking",
-                         headerRight: () => (
-                              <TouchableOpacity onPress={handleLogout}>
-                                   <View style={{ marginRight: 10 }}>
-                                        <AntDesign name="logout" size={24} color="white" />
-                                   </View>
-                              </TouchableOpacity>
-                         ),
-                    }}
-               />
+                    <Drawer.Screen name="DSR Screen" component={DSRScreen}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Daily Sales Report",
+                         }}
+                    />
+                    <Drawer.Screen name="PaySlip" component={PaySlip}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "PaySlip",
+                         }}
+                    />
+                    <Drawer.Screen name="Reimbursement Claim" component={ReimbursementClaim}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Reimbursement Claim",
+                         }}
+                    />
+                    <Drawer.Screen name="Leave" component={Holiday}
+                         options={{
+                              headerStyle: {
+                                   backgroundColor: '#f2612b'
+                              },
+                              headerTitleStyle: {
+                                   color: 'white',
+                                   marginLeft: 'auto', // Align to the left
+                                   marginRight: 'auto', // Align to the right
+                                   justifyContent: 'center', // Center vertically
+                                   alignItems: 'center', // Center horizontally
+                              },
+                              headerTintColor: 'white',
+                              headerTitle: "Leave",
+
+                         }}
+                    />
+               </>)}
           </Drawer.Navigator>
      );
 }

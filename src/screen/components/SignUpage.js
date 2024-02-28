@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { TextInput, Snackbar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
+import Colors from '../constant/Colors';
 const SignUpage = () => {
      const navigation = useNavigation();
      const [EmployeeName, setName] = useState('');
@@ -14,26 +15,21 @@ const SignUpage = () => {
      const [isValid, setIsValid] = useState(true);
      const [isValidEmail, setIsValidEmail] = useState(true);
      const [snackBarText, setSnackBarText] = useState('');
+     const [isloading, setIsLoading] = useState(false);
+
      const [visibleSnackBar, setVisibleSnackBar] = useState(false);
      const onShowSnackBar = () => setVisibleSnackBar(true);
      const onDismissSnackBar = () => setVisibleSnackBar(false);
      const [open, setOpen] = useState(false);
-     const [dropDownValue, setValue] = useState('');
-
-     const [items, setItems] = useState([
-          { label: 'Debit', value: '/v4/debit' },
-          { label: 'B2B PG', value: '/pg/v1/pay' }
-     ]);
-
      const [openEnvironment, setOpenEnvironment] = useState(false);
-     const [environmentDropDownValue, setEnvironmentValue] = useState('Please Select Department');
+     const [environmentDropDownValue, setEnvironmentValue] = useState('');
 
      const [environements, setEnvironment] = useState([
-          { label: 'UAT', value: 'UAT' },
-          { label: 'UAT_SIM', value: 'UAT_SIM' },
-          { label: 'PRODUCTION', value: 'PRODUCTION' }
+          { label: 'HR', value: '4' },
+          { label: 'MIS', value: '1' },
+          { label: 'IT', value: '3' },
+          { label: 'Sale', value: '2' },
      ]);
-
      const loginFormValidate = async () => {
           if (EmployeeName === null || EmployeeName === '') {
                setSnackBarText('Please Enter Employee Name');
@@ -50,15 +46,17 @@ const SignUpage = () => {
                setSnackBarText('Please Enter Employee Number');
                setVisibleSnackBar(true);
           }
-          else {
-               await AsyncStorage.setItem('EmployeeCode', (EmployeeCode));
-               setSnackBarText('Employee Sign Up Successfully');
+          else if (environmentDropDownValue === null || environmentDropDownValue === '') {
+               setSnackBarText('Please Select Employee');
                setVisibleSnackBar(true);
+          }
+          else {
                setPassword('');
                setCode('');
                setName('');
                setNumber('');
-               navigation.navigate("Login")
+               setEnvironmentValue("");
+               senData()
           }
      }
      const validatePassword = (value) => {
@@ -74,6 +72,42 @@ const SignUpage = () => {
           }
           setPassword(value);
      };
+     const senData = async () => {
+          setIsLoading(true);
+          const url = `https://hrms.kwicpay.com/api/WebAPI/SignUp?UserName=${encodeURIComponent(EmployeeName)}&Emp_Code=${encodeURIComponent(EmployeeCode)}&Emp_Contact=${encodeURIComponent(EmployeeNumber)}&Password=${encodeURIComponent(EmployeePassword)}&UserCode=${encodeURIComponent(environmentDropDownValue)}`;
+          console.log(url)
+          try {
+               const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                         "Content-Type": "application/json",
+                    },
+               });
+               const textResponse = await response.json();
+               console.log(textResponse)
+               if (textResponse.API_STATUS === "OK") {
+                    Alert.alert('Successfully Signed', textResponse.MSG);
+                    navigation.navigate("Login");
+                    setIsLoading(false);
+               } else {
+                    setIsLoading(false);
+                    Alert.alert('Invalid Data', textResponse.DATA);
+                    return;
+               }
+          } catch (error) {
+               setIsLoading(false);
+               console.log(error);
+          }
+     };
+     if (isloading) {
+          return (
+               <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                         <ActivityIndicator size="40" color={Colors.accent} />
+                         <Text style={{ color: '#000', marginTop: 30, fontSize: 16, fontWeight: "bold" }}>Please wait while we process your request...</Text>
+                    </View>
+               </View>);
+     }
      return (
           <SafeAreaProvider>
                <ScrollView style={{ backgroundColor: '#ffffff', flex: 1 }}>
@@ -120,10 +154,10 @@ const SignUpage = () => {
                                    <TextInput
                                         style={styles.input}
                                         autoCorrect={false}
-                                        placeholder='Enter Employee Name'
+                                        placeholder='Enter User Name'
                                         value={EmployeeName}
                                         underlineColorAndroid="transparent"
-                                        label={"Enter Employee Name"}
+                                        label={"Enter User Name"}
                                         mode='outlined'
                                         outlineColor='#f2612b'
                                         underlineColor='#f2612b'
@@ -139,7 +173,6 @@ const SignUpage = () => {
                                    <TextInput
                                         style={styles.input}
                                         autoCorrect={false}
-                                        maxLength={8}
                                         placeholder='Enter Employee Code'
                                         underlineColorAndroid="transparent"
                                         cursorColor="#5DADE2"
@@ -174,7 +207,6 @@ const SignUpage = () => {
                                    <TextInput
                                         style={styles.input}
                                         autoCorrect={false}
-                                        maxLength={8}
                                         placeholder='Enter Password'
                                         underlineColorAndroid="transparent"
                                         cursorColor="#5DADE2"
@@ -186,7 +218,7 @@ const SignUpage = () => {
                                         activeOutlineColor='#5DADE2'
                                         onChangeText={(value) => validatePassword(value)}
                                         activeUnderlineColor='#5DADE2'
-                                        left={<TextInput.Icon icon="account" size={25} color="#f2612b" />}
+                                        left={<TextInput.Icon icon="security" size={25} color="#f2612b" />}
                                    />
                                    {!isValid && (
                                         <Text style={{ color: 'red' }}>

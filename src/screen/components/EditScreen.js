@@ -85,7 +85,7 @@ const EditProfileScreen = () => {
                                    backgroundColor: '#fff',
                                    paddingHorizontal: 60,
                                    borderTopRightRadius: 180,
-                              }}>
+                                }}>
                                    <View style={styles.spacing_big}></View>
                                    <View style={styles.spacing}></View>
                                    {selectedPhoto == null || selectedPhoto == "" ? <View style={[styles.cardStyle, { flexDirection: "row", justifyContent: "space-between", alignItems: "center" }]}>

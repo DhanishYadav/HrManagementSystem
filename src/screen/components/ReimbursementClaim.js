@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableHighlight, View, Image } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableHighlight, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from 'react-native-file-viewer';
-
+import DropDownPicker from 'react-native-dropdown-picker';
+import { Snackbar, TextInput } from 'react-native-paper';
 const Example = () => {
-
+     const [open, setOpen] = useState(false);
+     const [value, setValue] = useState(null);
+     const [name, setName] = useState(null);
+     const [snackBarText, setSnackBarText] = useState('');
+     const [visibleSnackBar, setVisibleSnackBar] = useState(false);
+     const onShowSnackBar = () => setVisibleSnackBar(true);
+     const onDismissSnackBar = () => setVisibleSnackBar(false);
+     const [EmployeeName, setEmployeeName] = useState('');
+     const [employeeCode, setEmployeeCode] = useState('');
      const NumberToWords = (number) => {
           const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
           const teens = ['Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
@@ -68,16 +77,16 @@ const Example = () => {
 
           return convert(number);
      };
-     const totalBalance = 95966;
+     const totalBalance = 90099;
      const formattedTotalBalance = Math.floor(totalBalance);
      const createPDF = async () => {
+
           const currentDate = new Date().toLocaleDateString();
           const receiptData = {
                date: currentDate,
                amount: '$100.00',
                payer: 'John Doe',
                purpose: 'Payment for goods/services',
-
           };
           const htmlContent = `
           <head>
@@ -90,22 +99,30 @@ const Example = () => {
                margin: 0;
                padding:10px;
            }
-
            #container {
                 padding: 10px;
            }
-
            .custom-class {
                color: blue;
                font-weight: bold;
            }
-
            #image {
                display: block;
                height: 80px;
-               width: 80px;
+               color:white;
+               font-size:16;
+               align-items: center;
+               align-self: center;
+               text-align:center;
+               width:80px;
+               transform: skewX(30deg); /* Adjust the degree value as needed */
+               border-radius: 10px; /* Adjust the border-radius value as needed */
+               background-color:#e44f26;
+               box-shadow: 
+                   0 0 10px rgba(0,0,0,.5), /* Outer shadow */
+                   inset 0 0 rgba(0,0,0,1) /* Inner shadow */
+                   
            }
-
            img {
                display: block;
                height: 80px;
@@ -162,7 +179,6 @@ const Example = () => {
                border-radius: 10px;
                border: 2px solid #adabab;
            }
-
            #earingP1 {
                min-width: '100%';
                min-height: 50px;
@@ -170,7 +186,6 @@ const Example = () => {
                flex-direction: row;
                display: flex;
            }
-
            #e1 {
                min-width:360px;
                min-height: 40px;
@@ -196,8 +211,6 @@ const Example = () => {
                display: flex;
 
            }
-
-
            #spanText {
                color: gray;
                font-size: medium;
@@ -248,10 +261,10 @@ const Example = () => {
      <div id="container" class="custom-class">
           <div class="parent">
                <div id="image">
-               <img src='../../asserts/appicon.png'/>
-               </div>
+                <h4 style=margin-top:6px> K <br/> KWICPAY<br/><span>Quick Secure</span></h4>
+               </div >
                <div>
-                    <span style="color:black;font-size:large;">KWICPAY</span>
+                    <span style="color:orange;font-size:large;">KWICPAY</span>
                     <p style="color:gray;font-size:15px;">B 3/42, Vibhuti Khand,Gomti Nagar Lucknow 226010
                          India</p>
                </div>
@@ -259,7 +272,7 @@ const Example = () => {
                     <span style="color:gray;font-size:medium;padding:0px;">Payslip For The Month</span>
                     <p  style="color:black;font-size:large;">Date: ${receiptData.date}</p>
                </div>
-          </div>
+          </div >
           <div class="parent" style="border-bottom:0px solid black;margin-top:10px;">
            <div style="flex-direction:row; display: flex;">
                <div class="emp">
@@ -274,12 +287,12 @@ const Example = () => {
                     <p>: &nbsp;&nbsp;&nbsp; Dhanish Yadav</p>
                     <p>: &nbsp;&nbsp;&nbsp; 10KP631</p>
                     <p>: &nbsp;&nbsp;&nbsp; December</p>
-                    <p>: &nbsp;&nbsp;&nbsp; 03/01/2024</p>
+                    <p>: &nbsp;&nbsp;&nbsp; ${receiptData.date}</p>
                </div>
           </div>
           <div id="payment">
                     <div id="border">
-                         <p style="color:black;font-size:medium;">&nbsp;  &nbsp;  &nbsp;₹ 300000.00</p>
+                         <p style="color:black;font-size:medium;">&nbsp;  &nbsp;  &nbsp;₹ ${formattedTotalBalance}</p>
                          <p style="color:gray;font-size:medium;"> &nbsp; &nbsp;  &nbsp; Employee Net Pay</p>
                     </div>
                     <div>
@@ -325,7 +338,6 @@ const Example = () => {
                          <span id="spanNo">₹ 1,000.00</span>
                     </div>
                     <div id="e11">
-
                     </div>
                </div>
                <div id="earingP1">
@@ -334,7 +346,6 @@ const Example = () => {
                          <span id="spanNo">₹ 15,00.00</span>
                     </div>
                     <div id="e11">
-
                     </div>
                </div>
                <div id="earingP1">
@@ -343,7 +354,6 @@ const Example = () => {
                          <span id="spanNo">₹ 660.00</span>
                     </div>
                     <div id="e11">
-
                     </div>
                </div>
                <div id="earingP1">
@@ -365,7 +375,6 @@ const Example = () => {
                          <span id="spanNo">₹ 2,160.00</span>
                     </div>
                </div>
-            
 </div>
 <div id="earnig">
 <div style="margin-left:20px;">
@@ -383,9 +392,9 @@ const Example = () => {
 <span id="spanNo"> Indian Rupees ${NumberToWords(formattedTotalBalance)} Only</span>
 </div>
 </div>
-     </div>
-</body>
-        `;
+     </div >
+</body >
+     `;
           const options = {
                html: htmlContent,
                fileName: 'payment_receipt',
@@ -410,28 +419,161 @@ const Example = () => {
      const openFile = (filePath) => {
           FileViewer.open(filePath)
                .then(() => {
-                    // success
                })
                .catch((error) => {
                     console.error('Error opening file:', error);
-                    // handle error
+
                });
      };
-
+     const months = [
+          { label: 'January', value: 'January' },
+          { label: 'February', value: 'February' },
+          { label: 'March', value: 'March' },
+          { label: 'April', value: 'April' },
+          { label: 'May', value: 'May' },
+          { label: 'June', value: 'June' },
+          { label: 'July', value: 'July' },
+          { label: 'August', value: 'August' },
+          { label: 'September', value: 'September' },
+          { label: 'October', value: 'October' },
+          { label: 'November', value: 'November' },
+          { label: 'December', value: 'December' },
+     ];
+     const submitForm = async () => {
+          if (EmployeeName === null || EmployeeName === '') {
+               setSnackBarText('Enter Employee Name');
+               setVisibleSnackBar(true);
+          }
+          else if (employeeCode === null || employeeCode === '') {
+               setSnackBarText('Enter Employee Type');
+               setVisibleSnackBar(true);
+          }
+          else if (value === null || value === '') {
+               setSnackBarText('Please Choose Designation');
+               setVisibleSnackBar(true);
+          }
+          else {
+               setEmployeeCode("");
+               setEmployeeName("");
+               setValue("");
+               createPDF()
+          }
+     };
      return (
           <View style={styles.container}>
-               <TouchableHighlight onPress={createPDF}>
-                    <Text style={{ fontSize: 22, fontWeight: '700' }}>Create PDF</Text>
-               </TouchableHighlight>
+               <ScrollView style={styles.container}>
+                    <TextInput
+                         style={styles.input}
+                         autoCorrect={false}
+                         placeholder='Enter Employee Name'
+                         value={EmployeeName}
+                         underlineColorAndroid="transparent"
+                         // label={"Enter Employee Name"}
+                         mode='outlined'
+                         outlineColor='#f2612b'
+                         underlineColor='#f2612b'
+                         activeOutlineColor='#5DADE2'
+                         activeUnderlineColor='#f2612b'
+                         onChangeText={(value) => setEmployeeName(value)}
+                         cursorColor='#f2612b'
+                         left={<TextInput.Icon icon="account" size={25} color="#f2612b" />}
+                    />
+                    <TextInput
+                         style={styles.input}
+                         autoCorrect={false}
+                         placeholder='Enter Employee Code'
+                         value={employeeCode}
+                         underlineColorAndroid="transparent"
+                         // label={"Enter Employee Code"}
+                         mode='outlined'
+                         outlineColor='#f2612b'
+                         underlineColor='#f2612b'
+                         activeOutlineColor='#5DADE2'
+                         activeUnderlineColor='#f2612b'
+                         onChangeText={(value) => setEmployeeCode(value)}
+                         cursorColor='#f2612b'
+                         left={<TextInput.Icon icon="numeric-9-plus-box-multiple-outline" size={25} color="#f2612b" />}
+                    />
+                    <DropDownPicker
+                         items={months}
+                         open={open}
+                         value={value}
+                         setOpen={setOpen}
+                         setValue={setValue}
+                         // onChangeValue={(item) => createPDF(item)}
+                         placeholder={'Select Months Name For PaySlip.'}
+                         style={styles.dropdown}
+                         itemStyle={{
+                              justifyContent: 'flex-start',
+                         }}
+                         dropDownStyle={{ backgroundColor: "red", height: 200 }}
+                    />
+                    <View
+                         style={{
+                              backgroundColor: '#f2612b',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 20,
+                              width: "100%",
+                              height: 50, marginTop: 60
+                         }}>
+                         <TouchableOpacity onPress={submitForm}>
+                              <Text
+                                   style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        fontWeight: "700"
+                                   }}>Submit Now</Text>
+                         </TouchableOpacity>
+                    </View>
+               </ScrollView>
+               <Snackbar
+                    visible={visibleSnackBar}
+                    onDismiss={onDismissSnackBar}
+                    style={styles.snackBar}
+                    action={{
+                         label: 'Dismiss',
+                         onPress: () => {
+                              onDismissSnackBar();
+                         },
+                    }}>
+                    {snackBarText}
+               </Snackbar>
           </View>
      );
 };
 const styles = StyleSheet.create({
      container: {
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
+          marginHorizontal: 10,
+          marginTop: 10
+     },
+     dropdown: {
+          height: 50,
+          borderColor: '#f2612b',
+          borderWidth: 1,
+          borderRadius: 8,
+          marginVertical: 12,
+          padding: 8,
+
+     },
+     label: {
+          fontWeight: '300',
+          paddingLeft: 5,
+          fontSize: 15,
+          color: 'black',
+          fontWeight: "bold",
+          marginVertical: 3
+     },
+     snackBar: {
+          backgroundColor: '#003990',
+     },
+     input: {
+          height: 35,
+          margin: 5,
+          borderRadius: 0,
+          padding: 6,
+          color: "white"
      },
 });
-
 export default Example;
